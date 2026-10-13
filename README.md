@@ -9,8 +9,7 @@ Plateforme de logement étudiant et de colocation.
 
 ## Lancer le projet sur une nouvelle machine
 
-Les commandes ci-dessous sont pour **Ubuntu / Debian** (recommandé).
-Pour Windows, voir la [note en bas de page](#windows).
+Les commandes ci-dessous sont pour **Ubuntu / Debian**.
 
 ### 1. Installer les prérequis
 
@@ -131,30 +130,3 @@ Après un `git pull` qui modifie les modèles ou les dépendances :
 pip install -r requirements/dev.txt
 python manage.py migrate
 ```
-
----
-
-## Problèmes fréquents
-
-| Erreur | Solution |
-|---|---|
-| `password authentication failed for user "colohouse"` | L'utilisateur PostgreSQL n'existe pas ou le mot de passe diffère : refaire l'étape 3, ou corriger `DATABASE_URL` dans `.env`. |
-| `Could not find the GDAL library` | GDAL n'est pas installé : `sudo apt install gdal-bin libgdal-dev`. |
-| `could not open extension control file ".../postgis.control"` | PostGIS n'est pas installé : `sudo apt install postgis`. |
-| `ImproperlyConfigured: Set the DJANGO_SECRET_KEY environment variable` | Le fichier `backend/.env` est absent : refaire l'étape 5. |
-| `No module named 'django'` | L'environnement virtuel n'est pas activé : `source .venv/bin/activate`. |
-| `Connection refused` sur le port 5432 | PostgreSQL est arrêté : `sudo systemctl start postgresql`. |
-| `That port is already in use` | Un serveur tourne déjà ; sinon lancer sur un autre port : `python manage.py runserver 8001`. |
-
----
-
-## Windows
-
-GeoDjango (PostGIS + GDAL) est difficile à installer directement sous Windows.
-La solution la plus simple est **WSL** (Ubuntu dans Windows) :
-
-1. Dans PowerShell en administrateur : `wsl --install`, puis redémarrer.
-2. Ouvrir « Ubuntu » depuis le menu Démarrer.
-3. Suivre ce guide depuis l'étape 1, dans le terminal Ubuntu.
-
-Le site reste accessible depuis le navigateur Windows sur http://127.0.0.1:8000/.
