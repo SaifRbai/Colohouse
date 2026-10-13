@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  // Carte OpenStreetMap. Sans connexion, la page reste utilisable.
+  function colohouseMap(id, lat, lon, zoom) {
+    if (typeof L === "undefined") {
+      document.getElementById(id).innerHTML =
+        '<p class="empty-state">Carte indisponible hors connexion.</p>';
+      return null;
+    }
+    const map = L.map(id).setView([lat, lon], zoom);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: "&copy; OpenStreetMap",
+    }).addTo(map);
+    return map;
+  }
+</script>

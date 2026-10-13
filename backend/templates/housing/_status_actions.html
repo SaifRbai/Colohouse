@@ -1,0 +1,15 @@
+<div class="actions">
+  {% if listing.status == statuses.ACTIVE %}
+    {% include "housing/_status_button.html" with target=statuses.PAUSED label="Mettre en pause" css="btn-ghost" %}
+  {% elif listing.status == statuses.PAUSED %}
+    {% include "housing/_status_button.html" with target=statuses.ACTIVE label="Réactiver" css="" %}
+  {% endif %}
+  {% if listing.status != statuses.CLOSED and listing.status != statuses.PENDING_APPROVAL %}
+    {% include "housing/_status_button.html" with target=statuses.CLOSED label="Clôturer" css="btn-danger" %}
+  {% endif %}
+  {% if listing.status == statuses.HIDDEN %}
+    <span class="muted small">Masquée par la modération.</span>
+  {% elif listing.status == statuses.CLOSED %}
+    <span class="muted small">Clôturée — ne peut plus être réactivée.</span>
+  {% endif %}
+</div>

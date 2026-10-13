@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Mes favoris{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>Mes favoris</h1></div>
+
+{% if listings %}
+  <div class="grid">
+    {% for listing in listings %}
+      <div>
+        {% include "housing/_card.html" %}
+        <form method="post" action="{% url 'listings:favorite' listing.public_id %}" class="listing-under">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="linklike small" style="color:var(--coral-dk)">Retirer des favoris</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="panel empty-state">
+    <p>Aucun favori pour l'instant. Ajoute des annonces depuis leur page de détail.</p>
+    <a class="btn" href="{% url 'listings:list' %}">Parcourir les annonces</a>
+  </div>
+{% endif %}
+{% endblock %}

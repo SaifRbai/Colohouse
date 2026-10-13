@@ -1,0 +1,54 @@
+{% load static %}<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Accueil{% endblock %} · ColoHouse</title>
+  <link rel="stylesheet" href="{% static 'css/colohouse.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+{% with view=request.resolver_match.view_name %}
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="{% url 'web:home' %}"><span>Colo<b>House</b></span></a>
+      <nav class="nav">
+        <a href="{% url 'listings:list' %}" {% if view == 'listings:list' or view == 'listings:detail' %}class="active"{% endif %}>Annonces</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'listings:favorites' %}" {% if view == 'listings:favorites' %}class="active"{% endif %}>Favoris</a>
+          <a href="{% url 'listings:mine' %}" {% if view == 'listings:mine' %}class="active"{% endif %}>Mes annonces</a>
+          {% if user.is_staff %}<a href="{% url 'admin:index' %}">Administration</a>{% endif %}
+          <a href="{% url 'web:profile' %}" {% if view == 'web:profile' %}class="active"{% endif %}>{{ user.first_name|default:"Mon profil" }}</a>
+          <form method="post" action="{% url 'web:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="linklike">Déconnexion</button>
+          </form>
+          <a class="btn btn-sm" href="{% url 'listings:create' %}">Publier une annonce</a>
+        {% else %}
+          <a href="{% url 'web:login' %}" {% if view == 'web:login' %}class="active"{% endif %}>Connexion</a>
+          <a class="btn btn-sm" href="{% url 'web:register' %}">Inscription</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+{% endwith %}
+
+  <main>
+    <div class="wrap">
+      {% if messages %}
+        <ul class="flash">
+          {% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© {% now "Y" %} ColoHouse — logement étudiant et colocation</span>
+      <span><a href="{% url 'listings:list' %}">Annonces</a> · <a href="{% url 'docs' %}">API</a></span>
+    </div>
+  </footer>
+</body>
+</html>

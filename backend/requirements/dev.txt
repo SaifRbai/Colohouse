@@ -1,0 +1,4 @@
+-r base.txt
+
+# Outils de développement — à compléter au besoin
+# (pytest, ruff, black… seront ajoutés à la phase 13)

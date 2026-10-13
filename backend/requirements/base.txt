@@ -1,0 +1,24 @@
+# Dépendances ajoutées au fur et à mesure des phases.
+# Règle : une nouvelle fonctionnalité = on ajoute ICI la ligne correspondante,
+# puis : pip install -r requirements/dev.txt
+
+# --- Cœur (phase 1) ---
+Django==5.1.4
+djangorestframework==3.15.2
+django-environ==0.11.2
+psycopg[binary]==3.2.3          # pilote PostgreSQL / PostGIS
+
+# --- API (phases 3 et 5) ---
+djangorestframework-simplejwt==5.3.1
+drf-spectacular==0.27.2         # documentation OpenAPI /api/docs/
+django-cors-headers==4.6.0      # appels depuis l'app mobile
+
+# --- Sécurité (phase 4) ---
+argon2-cffi==23.1.0             # hachage des mots de passe
+
+# À AJOUTER PLUS TARD, quand la phase arrive :
+#   django-filter        → phase 6 (filtres des annonces)
+#   channels, channels-redis, daphne → phase 9 (chat)
+#   celery, redis, django-redis      → phase 8 (matching) / 10 (notifications)
+#   django-storages, boto3, Pillow   → phase 6 (photos)
+#   structlog, gunicorn, uvicorn     → mise en production

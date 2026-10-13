@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load l10n %}
+{% block title %}{{ listing.title }}{% endblock %}
+{% block head %}{% include "housing/_leaflet.html" %}{% endblock %}
+
+{% block content %}
+<a class="back" href="{% url 'listings:list' %}">{% include "_icon.html" with name="back" %} Toutes les annonces</a>
+
+{% if listing.photos.all %}
+  <div class="gallery">
+    {% for photo in listing.photos.all %}<img src="{{ photo.url }}" alt="">{% endfor %}
+  </div>
+{% endif %}
+
+<div class="detail">
+  <div class="detail-main">
+    <div class="listing-type">
+      {{ listing.get_room_type_display }}
+      {% if listing.status != statuses.ACTIVE %}&nbsp;<span class="status {{ listing.status }}">{{ listing.get_status_display }}</span>{% endif %}
+    </div>
+    <h1>{{ listing.title }}</h1>
+    <div class="listing-place">{% include "_icon.html" with name="pin" %} {{ listing.neighbourhood }}</div>
+
+    <h2>Description</h2>
+    <p>{{ listing.description }}</p>
+
+    {% if listing.rules %}
+      <h2>Règles de la maison</h2>
+      <p>{{ listing.rules }}</p>
+    {% endif %}
+
+    <h2>Localisation</h2>
+    <div id="map" class="map"></div>
+    {% if visible %}
+      <p><strong>Adresse :</strong> {{ listing.address }}</p>
+    {% else %}
+      <div class="notice">{% include "_icon.html" with name="lock" %}
+        <span>Zone approximative (environ 300 m). L'adresse exacte et le numéro du propriétaire
+        sont transmis une fois ta demande acceptée.</span></div>
+    {% endif %}
+  </div>
+
+  <aside class="panel facts">
+    <div class="price">{{ listing.rent|floatformat:0 }} DT <small>/ mois</small></div>
+    <dl>
+      <dt>Caution</dt><dd>{{ listing.deposit|floatformat:0 }} DT</dd>
+      <dt>Disponible</dt><dd>{{ listing.available_from|date:"d/m/Y" }}</dd>
+      <dt>Publiée le</dt><dd>{{ listing.created_at|date:"d/m/Y" }}</dd>
+    </dl>
+
+    <div class="owner">
+      <div class="avatar avatar-sm">{{ listing.owner.first_name|first|upper }}{{ listing.owner.last_name|first|upper }}</div>
+      <div>
+        <strong>{{ listing.owner.full_name }}</strong>
+        {% if listing.owner.university %}<div class="muted small">{{ listing.owner.university }}</div>{% endif %}
+        {% if visible and listing.owner.phone %}<div class="small">Tél. {{ listing.owner.phone }}</div>{% endif %}
+      </div>
+    </div>
+
+    {% if user.is_authenticated and not is_owner %}
+      <form method="post" action="{% url 'listings:favorite' listing.public_id %}" style="margin-top:1.4rem">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% if listing.is_favorited %}
+          <button type="submit" class="btn btn-ghost btn-block">{% include "_icon.html" with name="heart" %} Retirer des favoris</button>
+        {% else %}
+          <button type="submit" class="btn btn-ghost btn-block">{% include "_icon.html" with name="heart-outline" %} Ajouter aux favoris</button>
+        {% endif %}
+      </form>
+    {% elif not user.is_authenticated %}
+      <p class="small muted" style="margin:1.4rem 0 0"><a href="{% url 'web:login' %}?next={{ request.path }}">Connecte-toi</a> pour enregistrer cette annonce.</p>
+    {% endif %}
+
+    {% if is_owner %}
+      <hr class="divider" style="margin:1.4rem 0 1rem">
+      <p class="small muted" style="margin:0 0 .6rem">Gérer mon annonce</p>
+      {% include "housing/_status_actions.html" %}
+    {% endif %}
+  </aside>
+</div>
+
+<script>
+  {% localize off %}
+  const map = colohouseMap("map", {{ lat }}, {{ lon }}, 15);
+  if (map) {
+    {% if visible %}
+      L.marker([{{ lat }}, {{ lon }}]).addTo(map);
+    {% else %}
+      L.circle([{{ lat }}, {{ lon }}], {radius: 300, color: "#1f6f54", fillColor: "#1f6f54", fillOpacity: .15}).addTo(map);
+    {% endif %}
+  }
+  {% endlocalize %}
+</script>
+{% endblock %}

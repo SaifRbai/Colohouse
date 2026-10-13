@@ -1,0 +1,6 @@
+<form method="post" action="{% url 'listings:status' listing.public_id %}">
+  {% csrf_token %}
+  <input type="hidden" name="status" value="{{ target }}">
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  <button type="submit" class="btn btn-sm {{ css }}">{{ label }}</button>
+</form>

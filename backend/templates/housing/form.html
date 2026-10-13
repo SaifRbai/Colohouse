@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Publier une annonce{% endblock %}
+{% block head %}{% include "housing/_leaflet.html" %}{% endblock %}
+
+{% block content %}
+<div class="panel panel-medium">
+  <h1>Publier une annonce</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "_form_fields.html" %}
+
+    <div class="field">
+      <label>Emplacement</label>
+      <div id="map" class="map"></div>
+      <small>Clique sur la carte pour placer le logement : latitude et longitude se remplissent
+        automatiquement. Les autres étudiants ne verront qu'une zone approximative.</small>
+    </div>
+
+    <button type="submit" class="btn btn-block">Publier l'annonce</button>
+  </form>
+</div>
+
+<script>
+  const latInput = document.getElementById("id_latitude");
+  const lonInput = document.getElementById("id_longitude");
+  const hasPoint = latInput.value && lonInput.value;
+  // Centre par défaut : Tunis
+  const map = colohouseMap("map", hasPoint ? +latInput.value : 36.8065,
+                                  hasPoint ? +lonInput.value : 10.1815, hasPoint ? 15 : 12);
+  if (map) {
+    let marker = hasPoint ? L.marker([+latInput.value, +lonInput.value]).addTo(map) : null;
+    map.on("click", (e) => {
+      latInput.value = e.latlng.lat.toFixed(6);
+      lonInput.value = e.latlng.lng.toFixed(6);
+      if (marker) marker.setLatLng(e.latlng); else marker = L.marker(e.latlng).addTo(map);
+    });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Django
+*.sqlite3
+/backend/media/
+/backend/staticfiles/
+
+# Environnement — JAMAIS commité
+.env
+.env.*
+!.env.example
+
+# Outils
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Flutter
+/mobile/build/
+/mobile/.dart_tool/
+**/*.g.dart
+**/*.freezed.dart
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Documents de travail — non publiés
+/docs/
+/guide/
+/RAPPORT-PROJET.txt

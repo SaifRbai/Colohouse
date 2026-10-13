@@ -1,0 +1,26 @@
+{% with photo=listing.photos.all.0 %}
+<a class="listing" href="{% url 'listings:detail' listing.public_id %}">
+  {% if photo %}
+    <div class="listing-photo" style="background-image:url('{{ photo.url }}')">
+  {% else %}
+    <div class="listing-photo empty">{% include "_icon.html" with name="house" %}
+  {% endif %}
+    {% if listing.is_favorited %}<span class="fav" title="Dans tes favoris">{% include "_icon.html" with name="heart" %}</span>{% endif %}
+  </div>
+  <div class="listing-body">
+    <div class="listing-type">
+      {{ listing.get_room_type_display }}
+      {% if show_status %}&nbsp;<span class="status {{ listing.status }}">{{ listing.get_status_display }}</span>{% endif %}
+    </div>
+    <div class="listing-title">{{ listing.title }}</div>
+    <div class="listing-place">
+      {% include "_icon.html" with name="pin" %} {{ listing.neighbourhood }}
+      {% if listing.distance %}<span>· {{ listing.distance.km|floatformat:1 }} km</span>{% endif %}
+    </div>
+    <div class="listing-foot">
+      <span class="price">{{ listing.rent|floatformat:0 }} DT <small>/ mois</small></span>
+      <span class="muted small">dès le {{ listing.available_from|date:"d/m" }}</span>
+    </div>
+  </div>
+</a>
+{% endwith %}

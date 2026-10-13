@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Supprimer mon compte{% endblock %}
+
+{% block content %}
+<div class="panel panel-narrow">
+  <h1>Supprimer mon compte</h1>
+  <p>Cette action est <strong>définitive</strong>. Tes données personnelles (nom, email,
+     téléphone, photo) seront anonymisées et tu ne pourras plus te connecter.</p>
+  <form method="post" class="actions" style="margin-top:1.5rem">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+    <a class="btn btn-ghost" href="{% url 'web:profile' %}">Annuler</a>
+  </form>
+</div>
+{% endblock %}

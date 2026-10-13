@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Mes annonces{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Mes annonces</h1>
+  <a class="btn btn-sm" href="{% url 'listings:create' %}">{% include "_icon.html" with name="plus" %} Nouvelle annonce</a>
+</div>
+
+{% if listings %}
+  <div class="grid">
+    {% for listing in listings %}
+      <div>
+        {% include "housing/_card.html" with show_status=True %}
+        <div class="listing-under">{% include "housing/_status_actions.html" %}</div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="panel empty-state">
+    <p>Tu n'as encore publié aucune annonce.</p>
+    <a class="btn" href="{% url 'listings:create' %}">Publier ma première annonce</a>
+  </div>
+{% endif %}
+{% endblock %}
